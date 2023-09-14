@@ -1,5 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { Link, type DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
+import type { MetricasData, Dato } from '~/interfaces';
 
 
 export const usePokemonList = routeLoader$(async () => {
@@ -10,16 +11,16 @@ export const usePokemonList = routeLoader$(async () => {
     return data;
 })
 
-export const useMetricasList = routeLoader$(async () => {
-    const resp = await fetch(`https://script.google.com/macros/s/AKfycbzQz4O8jvtW_8lglgcgX2n6nDBG-zHYSVmKb_pgirLj9CbTqOZ-qWCrQWRuloAUxu5UZw/exec`);
-    const data = await resp.json();
+export const useMetricasList = routeLoader$<Dato[]>(async () => {
+    const resp = await fetch(`https://script.google.com/macros/s/AKfycbxQd1Rc7h24yr2Aafp6JOMkhDmAnOuDFbCKEVhEwPcZGAGEBIZGnMGZcdU2vNuC_ChHDw/exec`);
+    const data = await resp.json() as MetricasData;
 
-    console.log(data)
-    return data;
+
+    return data.datos;
 })
 
 export default component$(() => {
-    const metricasResp = useMetricasList();
+    const metricas = useMetricasList();
 
     return (
         <>
@@ -34,19 +35,13 @@ export default component$(() => {
             </div>
 
             <div class="grid grid-cols-6 mt-5">
-                <div class="m-5 flex flex-col justify-center items-center">Pokhemonn</div>
-                <div class="m-5 flex flex-col justify-center items-center">Pokhemonn</div>
-                <div class="m-5 flex flex-col justify-center items-center">Pokhemonn</div>
-                <div class="m-5 flex flex-col justify-center items-center">Pokhemonn</div>
-                <div class="m-5 flex flex-col justify-center items-center">Pokhemonn</div>
-                <div class="m-5 flex flex-col justify-center items-center">Pokhemonn</div>
-                <div class="m-5 flex flex-col justify-center items-center">Pokhemonn</div>
-                <div class="m-5 flex flex-col justify-center items-center">Pokhemonn</div>
+                {metricas.value.map(datta => (
+                    <div class="m-5 flex flex-col justify-center items-center" key={datta.sesiones}>{datta.duracion_media}</div>
+                ))}
+
 
             </div>
-            <div>
-                {JSON.stringify(metricasResp.value)}
-            </div>
+
         </>
     )
 })
