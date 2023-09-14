@@ -16,7 +16,7 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 export default component$(() => {
   return (
     <>
-      <main class="container mx-auto">
+      <main class="container mx-auto flex flex-col items-center justify-center">
 
         <Menu />
 

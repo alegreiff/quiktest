@@ -1,8 +1,9 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
-import { Link, type DocumentHead } from "@builder.io/qwik-city";
+import { useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import { PokemonImage } from "~/components/imagenes/pokemon-image";
 
 export default component$(() => {
+  const nav = useNavigate();
 
   const pokemonId = useSignal(4);
   const backImage = useSignal(false)
@@ -14,17 +15,22 @@ export default component$(() => {
       pokemonId.value += value;
     }
   )
+  const gotoPokemon = $(() => {
+    nav(`/amigo/${pokemonId.value}/`);
+  })
 
   return (
     <>
       <h1 class="p-8 bg-lime-300 text-6xl">Hi 👋</h1>
       <span class="text-9xl">{pokemonId.value}</span>
       {backImage.value ? 'ORIGINAL' : 'TRASERA'}
-      {/* <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId.value}.png`} alt="PoKKehMonn" width={165} height={165} /> */}
 
-      <Link href={`/amigo/${pokemonId.value}/`}>
+
+
+      <div onClick$={() => gotoPokemon()}>
         <PokemonImage id={pokemonId.value} size={241} backImage={backImage.value} isVisible={isVisible.value} />
-      </Link>
+      </div>
+
 
       <div class="mt-2">
         <button class="btn btn-primary mr-2" onClick$={() => changePokemonId(-1)}>Anterior</button>
